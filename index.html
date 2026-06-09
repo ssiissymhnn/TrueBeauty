@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#ffffff" />
+  <title>트루뷰티 TrueBeauty — 신뢰 기반 뷰티 리뷰</title>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <link rel="stylesheet" href="style.css?v=20260602reviewimg" />
+</head>
+<body class="page-root">
+  <div class="phone-frame" id="phone-frame" aria-label="모바일 화면 프레임">
+    <div class="phone-status-bar" aria-hidden="true">
+      <div class="phone-status-bar__side phone-status-bar__side--left">
+        <time class="phone-status-bar__time" id="phone-status-time">9:41</time>
+      </div>
+      <div class="phone-status-bar__notch" aria-hidden="true"></div>
+      <div class="phone-status-bar__side phone-status-bar__side--right">
+        <svg class="phone-status-bar__icon" viewBox="0 0 18 12" fill="currentColor" aria-hidden="true">
+          <rect x="0" y="8" width="3" height="4" rx="0.5" opacity="0.35"/>
+          <rect x="5" y="5.5" width="3" height="6.5" rx="0.5" opacity="0.55"/>
+          <rect x="10" y="3" width="3" height="9" rx="0.5" opacity="0.75"/>
+          <rect x="15" y="0" width="3" height="12" rx="0.5"/>
+        </svg>
+        <svg class="phone-status-bar__icon" viewBox="0 0 16 12" fill="currentColor" aria-hidden="true">
+          <path d="M8 10.5a6.2 6.2 0 0 0 4.2-1.65l1.15 1.15a7.8 7.8 0 0 1-10.7 0L3.8 8.85A6.2 6.2 0 0 0 8 10.5Zm0-3a3.2 3.2 0 0 0 2.15-.85l1.15 1.15a4.8 4.8 0 0 1-6.6 0L5.85 6.65A3.2 3.2 0 0 0 8 7.5ZM8 4.5a.9.9 0 1 0 0-1.8.9.9 0 0 0 0 1.8Z"/>
+        </svg>
+        <svg class="phone-status-bar__icon phone-status-bar__icon--battery" viewBox="0 0 27 13" fill="none" aria-hidden="true">
+          <rect x="0.5" y="0.5" width="22" height="12" rx="2.5" stroke="currentColor" opacity="0.4"/>
+          <rect x="2" y="2" width="17" height="9" rx="1.5" fill="currentColor"/>
+          <path d="M24 4.5v4a2 2 0 0 0 0-4Z" fill="currentColor" opacity="0.45"/>
+        </svg>
+      </div>
+    </div>
+
+    <!-- 스플래시 (첫 진입 — 프로필 있으면 JS에서 숨김) -->
+    <section id="splash-flow" class="flow-layer splash-flow" aria-hidden="false">
+      <div class="splash-screen" id="splash-screen">
+        <div class="splash-screen__layer splash-screen__layer--solid" aria-hidden="true"></div>
+        <div class="splash-screen__layer splash-screen__layer--gradient" aria-hidden="true"></div>
+        <div class="splash-screen__content" id="splash-content">
+          <div class="splash-screen__hero">
+            <h1 class="splash-logo" aria-label="트루리뷰">트루리뷰</h1>
+            <p class="splash-slogan">당신이 믿고 볼 수 있는 리뷰만,</p>
+          </div>
+          <div class="splash-screen__actions">
+            <button type="button" class="splash-start-btn" id="btn-splash-start">시작하기</button>
+            <p class="splash-login-line">
+              이미 계정이 있나요?
+              <button type="button" class="splash-login-link" id="btn-login-hint">로그인하기</button>
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 온보딩 설문 (프로필 없을 때 표시) -->
+    <section id="wizard-flow" class="flow-layer wizard-flow hidden" aria-hidden="true">
+      <div class="wizard-shell">
+        <header class="wizard-header">
+          <button type="button" class="wizard-back" id="btn-wizard-back" aria-label="뒤로가기">
+            <svg class="wizard-back__svg" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M15 6L9 12L15 18" stroke="#383838" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </button>
+          <div class="wizard-progress-wrap">
+            <span class="wizard-progress-step" id="wizard-progress-step" aria-hidden="true">1 / 4</span>
+            <div class="wizard-progress-track" role="progressbar" aria-valuemin="1" aria-valuemax="4" aria-valuenow="1" id="wizard-progress-bar">
+              <div class="wizard-progress-fill" id="wizard-progress-fill"></div>
+            </div>
+          </div>
+          <span class="wizard-header-spacer" aria-hidden="true"></span>
+        </header>
+
+        <div class="wizard-body" id="wizard-body">
+          <div class="wizard-step" data-step="1">
+            <h2 class="wizard-q">당신의 피부타입은<br />무엇인가요?</h2>
+            <p class="wizard-sub wizard-sub--hint">가장 가까운 한 가지를 선택해 주세요</p>
+            <div class="option-grid" id="grid-skin-type" role="group" aria-label="피부 타입 선택"></div>
+          </div>
+
+          <div class="wizard-step hidden" data-step="2">
+            <h2 class="wizard-q">가장 고민되는<br />피부 문제는 무엇인가요?</h2>
+            <p class="wizard-sub">최대 3개까지 선택할 수 있어요</p>
+            <div class="option-grid" id="grid-concerns" role="group" aria-label="피부 고민 선택"></div>
+          </div>
+
+          <div class="wizard-step hidden" data-step="3">
+            <h2 class="wizard-q">새로운 화장품을 사용할 때<br />피부 반응은 어떤 편인가요?</h2>
+            <p class="wizard-sub wizard-sub--hint">가장 가까운 반응을 선택해 주세요</p>
+            <div class="option-list" id="list-reaction" role="radiogroup" aria-label="피부 반응 선택"></div>
+          </div>
+
+          <div class="wizard-step wizard-step--success hidden" data-step="4">
+            <div class="wizard-success-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="36" height="36" fill="none">
+                <path d="M5 12l5 5 9-11" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <h2 class="wizard-q">피부 정보 수집이<br />완료되었어요!</h2>
+            <p class="wizard-nickname-hint">회원님을 뭐라고 불러드리면 될까요?</p>
+            <input
+              type="text"
+              class="wizard-nickname-input"
+              id="input-wizard-nickname"
+              maxlength="24"
+              placeholder="닉네임을 입력해 주세요"
+              autocomplete="nickname"
+              enterkeyhint="done"
+              aria-label="닉네임"
+            />
+          </div>
+        </div>
+
+        <footer class="wizard-footer">
+          <button type="button" class="wizard-next-btn" id="btn-wizard-next" disabled>다음</button>
+        </footer>
+      </div>
+    </section>
+
+    <!-- 메인 앱 -->
+    <div id="app-shell" class="app-shell flow-layer hidden" aria-hidden="true">
+      <main class="main-scroll" id="main-scroll">
+        <section id="view-home" class="view view--active" data-view="home" aria-label="홈">
+          <div class="home-search" role="search">
+            <label class="visually-hidden" for="home-search-input">제품 검색</label>
+            <div class="home-search__field">
+              <span class="home-search__icon" aria-hidden="true">⌕</span>
+              <input
+                type="search"
+                id="home-search-input"
+                class="home-search__input"
+                placeholder="제품명을 검색해 보세요"
+                autocomplete="off"
+                enterkeyhint="search"
+              />
+              <button type="button" id="home-search-clear" class="home-search__clear hidden" aria-label="검색어 지우기">×</button>
+            </div>
+          </div>
+
+          <div id="home-search-results" class="home-search-results hidden" aria-live="polite"></div>
+
+          <div id="home-search-body" class="home-search-body">
+            <div class="section-title-row">
+              <h2 class="heading-2">오늘의 인사이트</h2>
+            </div>
+
+            <div id="home-controversy" class="home-controversy-root"></div>
+
+            <h3 class="heading-3 section-gap" id="home-recommend-title">내 피부에게 신뢰도가 높은 제품</h3>
+            <div class="card-grid" id="home-recommend"></div>
+
+            <h3 class="heading-3 section-gap">인기 제품</h3>
+            <div id="home-popular" class="home-popular-root"></div>
+          </div>
+        </section>
+
+        <section id="view-category" class="view view--category-bleed" data-view="category" aria-label="카테고리" hidden>
+          <div class="cat-page">
+            <header class="cat-page-header">
+              <h2 class="cat-page-title">카테고리</h2>
+              <div class="cat-page-actions">
+                <button type="button" class="cat-icon-btn" aria-label="검색">⌕</button>
+              </div>
+            </header>
+            <div class="cat-banner" role="note">
+              <div class="cat-banner__text">
+                <strong>오늘의 큐레이션</strong>
+                <span>신뢰도 높은 리뷰만 모아 빠르게 비교해 보세요.</span>
+              </div>
+              <div class="cat-banner__art" aria-hidden="true"></div>
+            </div>
+            <div class="cat-split">
+              <nav class="cat-sidebar" id="category-sidebar" aria-label="대분류"></nav>
+              <div class="cat-main" id="category-main"></div>
+            </div>
+          </div>
+        </section>
+
+        <section id="view-reviews" class="view" data-view="reviews" aria-label="순수 리뷰" hidden>
+          <div class="section-title-row section-title-row--start">
+            <div class="reviews-title-group">
+              <h2 class="heading-2">순수 리뷰</h2>
+              <span class="reviews-info-wrap">
+                <button
+                  type="button"
+                  class="reviews-info-btn"
+                  id="btn-reviews-info"
+                  aria-label="순수 리뷰 기준 안내"
+                  aria-expanded="false"
+                  aria-controls="reviews-info-popover"
+                >?</button>
+                <div id="reviews-info-popover" class="reviews-info-popover hidden" role="tooltip" aria-hidden="true">
+                  <p>광고 의심이 낮고 패턴 분석상 신뢰도가 높은 리뷰만 모았습니다.</p>
+                  <p>신뢰도 <strong>70점 이상</strong>의 리뷰만 이 목록에 표시됩니다.</p>
+                </div>
+              </span>
+            </div>
+          </div>
+          <div class="feed" id="reviews-feed"></div>
+        </section>
+
+        <section id="view-magazine" class="view" data-view="magazine" aria-label="트루매거진" hidden>
+          <h2 class="heading-2">트루매거진</h2>
+          <p class="body-text muted">피부 타입별 추천, 비교, 성분 해석을 카드로 만나보세요.</p>
+          <div class="mag-grid" id="magazine-grid"></div>
+          <div id="mag-controversy-analysis" class="mag-controversy-stack" aria-label="오늘의 논란 제품 심층 분석"></div>
+        </section>
+
+        <section id="view-mypage" class="view" data-view="mypage" aria-label="마이페이지" hidden>
+          <h2 class="heading-2">마이페이지</h2>
+          <div class="glass-panel mypage-profile-head">
+            <div class="mypage-profile-avatar" id="mypage-avatar" aria-hidden="true">
+              <img class="mypage-profile-avatar__img hidden" id="mypage-avatar-img" alt="" width="72" height="72" decoding="async" />
+              <span class="mypage-profile-avatar__initial" id="mypage-avatar-initial">회</span>
+            </div>
+            <div class="mypage-profile-identity">
+              <p class="mypage-profile-identity__label caption muted">닉네임</p>
+              <strong class="mypage-profile-identity__name" id="mypage-nickname">회원</strong>
+              <button type="button" class="btn btn--ghost btn--small mypage-profile-identity__edit" id="btn-edit-profile">프로필 수정</button>
+            </div>
+          </div>
+          <div class="glass-panel profile-panel">
+            <div class="profile-row">
+              <span class="caption muted">피부 타입</span>
+              <strong id="mypage-skin"></strong>
+            </div>
+            <div class="profile-row">
+              <span class="caption muted">피부 고민</span>
+              <strong id="mypage-concern"></strong>
+            </div>
+            <div class="profile-row">
+              <span class="caption muted">피부 반응</span>
+              <strong id="mypage-reaction"></strong>
+            </div>
+            <button type="button" class="btn btn--ghost btn--small profile-panel__edit" id="btn-edit-skin">피부 정보 수정</button>
+          </div>
+
+          <h3 class="heading-3 section-gap">저장한 제품</h3>
+          <div id="saved-list" class="stack"></div>
+
+          <h3 class="heading-3 section-gap">최근 본 제품</h3>
+          <div id="recent-list" class="stack"></div>
+        </section>
+      </main>
+
+      <div id="home-ai-care-root" class="home-ai-care" aria-hidden="false">
+        <button
+          type="button"
+          class="home-ai-fab-btn"
+          id="btn-home-ai-care"
+          aria-label="AI 케어 상담"
+          aria-expanded="false"
+          aria-controls="ai-agent-overlay"
+        >
+          <span class="home-ai-fab-btn__aura" aria-hidden="true"></span>
+          <span class="home-ai-fab-btn__glass" aria-hidden="true"></span>
+          <svg class="home-ai-fab-btn__icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <defs>
+              <radialGradient id="home-ai-fab-icon-halo" cx="12" cy="11" r="13.5" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#1496e1" stop-opacity="0" />
+                <stop offset="48%" stop-color="#0b6fa8" stop-opacity="0.38" />
+                <stop offset="78%" stop-color="#044e78" stop-opacity="0.62" />
+                <stop offset="100%" stop-color="#044e78" stop-opacity="0" />
+              </radialGradient>
+              <filter id="home-ai-fab-icon-halo-blur" x="-110%" y="-110%" width="320%" height="320%">
+                <feGaussianBlur in="SourceGraphic" stdDeviation="3.4" />
+              </filter>
+            </defs>
+            <path
+              d="M12 5.25c-3.45 0-6.25 2.55-6.25 5.6 0 2.05 1.18 3.82 2.88 4.77L7.4 18.9l2.35-1.45H12c3.45 0 6.25-2.55 6.25-5.6S15.45 5.25 12 5.25z"
+              fill="url(#home-ai-fab-icon-halo)"
+              stroke="none"
+              filter="url(#home-ai-fab-icon-halo-blur)"
+            />
+            <path
+              d="M12 5.25c-3.45 0-6.25 2.55-6.25 5.6 0 2.05 1.18 3.82 2.88 4.77L7.4 18.9l2.35-1.45H12c3.45 0 6.25-2.55 6.25-5.6S15.45 5.25 12 5.25z"
+              fill="none"
+              stroke="#ffffff"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+            <circle cx="9" cy="11" r="1" fill="#ffffff" />
+            <circle cx="12" cy="11" r="1" fill="#ffffff" />
+            <circle cx="15" cy="11" r="1" fill="#ffffff" />
+          </svg>
+        </button>
+      </div>
+
+      <div id="ai-agent-overlay" class="ai-agent-overlay hidden" aria-hidden="true">
+        <div class="ai-agent-sheet" role="dialog" aria-modal="true" aria-labelledby="ai-agent-title">
+          <header class="ai-agent-topbar">
+            <button type="button" class="pd-icon-btn" id="btn-close-ai-agent" aria-label="닫기">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M15 6L9 12L15 18" stroke="#222" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </button>
+            <h2 class="ai-agent-topbar__title" id="ai-agent-title">AI 케어 에이전트</h2>
+            <div class="ai-agent-topbar__actions">
+              <button type="button" class="pd-icon-btn" aria-label="대화 기록">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M12 8v4l3 2" stroke="#222" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+                  <circle cx="12" cy="12" r="9" stroke="#222" stroke-width="1.8" />
+                </svg>
+              </button>
+              <button type="button" class="pd-icon-btn" aria-label="더보기">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <circle cx="12" cy="6" r="1.4" fill="#222" />
+                  <circle cx="12" cy="12" r="1.4" fill="#222" />
+                  <circle cx="12" cy="18" r="1.4" fill="#222" />
+                </svg>
+              </button>
+            </div>
+          </header>
+          <div class="ai-agent-body">
+            <div class="ai-agent-hero" aria-hidden="true">
+              <span class="ai-agent-hero__orb ai-agent-hero__orb--a"></span>
+              <span class="ai-agent-hero__orb ai-agent-hero__orb--b"></span>
+              <span class="ai-agent-hero__orb ai-agent-hero__orb--c"></span>
+            </div>
+            <h3 class="ai-agent-headline">피부 고민이나 제품 선택,<br />편하게 물어보세요.</h3>
+            <p class="ai-agent-sub">
+              회원님의 피부 정보를 바탕으로 궁금한 점을 자유롭게 말씀해주세요.<br />
+              AI 케어가 함께 도와드릴게요.
+            </p>
+          </div>
+          <footer class="ai-agent-footer">
+            <label class="ai-agent-input-wrap">
+              <span class="visually-hidden">메시지 입력</span>
+              <input type="text" class="ai-agent-input" id="ai-agent-input" placeholder="피부 고민이나 제품에 대해 물어보세요." autocomplete="off" />
+              <button type="button" class="ai-agent-send" aria-label="보내기">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M12 5v14M5 12l7-7 7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </button>
+            </label>
+            <p class="ai-agent-disclaimer">
+              <span class="ai-agent-beta">Beta</span>
+              AI가 생성한 응답은 부정확할 수 있습니다.
+              <button type="button" class="ai-agent-info" aria-label="안내">i</button>
+            </p>
+          </footer>
+        </div>
+      </div>
+
+      <div id="category-leaf-detail" class="detail-overlay hidden" aria-hidden="true">
+        <div class="detail-sheet detail-sheet--solid cat-leaf-sheet">
+          <header class="pd-topbar cat-leaf-topbar">
+            <button type="button" class="pd-icon-btn" id="btn-close-cat-leaf" aria-label="뒤로가기">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M15 6L9 12L15 18" stroke="#222" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </button>
+            <button type="button" class="cat-leaf-title-btn" id="btn-cat-leaf-parent" aria-haspopup="dialog" aria-expanded="false">
+              <span id="category-leaf-parent"></span>
+              <svg class="cat-leaf-title-btn__chev" width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </button>
+            <span class="wizard-header-spacer" aria-hidden="true"></span>
+          </header>
+
+          <nav class="cat-leaf-tabs" id="category-leaf-tabs" aria-label="세부 카테고리"></nav>
+
+          <div class="cat-leaf-toolbar">
+            <button
+              type="button"
+              class="cat-leaf-skin-toggle"
+              id="btn-cat-leaf-skin-toggle"
+              role="switch"
+              aria-checked="true"
+              aria-label="내 피부 맞춤 정렬"
+            >
+              <span class="cat-leaf-skin-toggle__track" aria-hidden="true">
+                <span class="cat-leaf-skin-toggle__knob"></span>
+              </span>
+              <span class="cat-leaf-skin-toggle__label">내피부</span>
+            </button>
+            <button type="button" class="cat-leaf-sort-btn" id="btn-cat-leaf-sort" aria-haspopup="dialog" aria-expanded="false">
+              <svg class="cat-leaf-sort-btn__icon" width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M7 4v15M3 8l4-4 4 4M17 20V5M13 16l4 4 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              <span id="category-leaf-sort-label">추천순</span>
+            </button>
+          </div>
+
+          <div id="category-leaf-body" class="detail-content cat-leaf-body"></div>
+        </div>
+
+        <div id="leaf-cat-sheet" class="leaf-sheet hidden" aria-hidden="true">
+          <div class="leaf-sheet__backdrop" data-close-leaf-sheet="leaf-cat-sheet"></div>
+          <div class="leaf-sheet__panel" role="dialog" aria-modal="true" aria-labelledby="leaf-cat-sheet-title">
+            <div class="leaf-sheet__handle" aria-hidden="true"></div>
+            <header class="leaf-sheet__header">
+              <h3 class="leaf-sheet__title" id="leaf-cat-sheet-title">카테고리</h3>
+              <button type="button" class="leaf-sheet__close" data-close-leaf-sheet="leaf-cat-sheet" aria-label="닫기">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M6 6L18 18M18 6L6 18" stroke="#222" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+              </button>
+            </header>
+            <div class="leaf-sheet__body" id="leaf-cat-sheet-body"></div>
+          </div>
+        </div>
+
+        <div id="leaf-sort-sheet" class="leaf-sheet hidden" aria-hidden="true">
+          <div class="leaf-sheet__backdrop" data-close-leaf-sheet="leaf-sort-sheet"></div>
+          <div class="leaf-sheet__panel leaf-sheet__panel--compact" role="dialog" aria-modal="true" aria-labelledby="leaf-sort-sheet-title">
+            <div class="leaf-sheet__handle" aria-hidden="true"></div>
+            <header class="leaf-sheet__header">
+              <h3 class="leaf-sheet__title" id="leaf-sort-sheet-title">정렬</h3>
+              <button type="button" class="leaf-sheet__close" data-close-leaf-sheet="leaf-sort-sheet" aria-label="닫기">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M6 6L18 18M18 6L6 18" stroke="#222" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+              </button>
+            </header>
+            <div class="leaf-sheet__body" id="leaf-sort-sheet-body"></div>
+          </div>
+        </div>
+      </div>
+
+      <div id="mag-article-detail" class="detail-overlay hidden" aria-hidden="true">
+        <div class="detail-sheet detail-sheet--solid mag-article-sheet">
+          <header class="pd-topbar">
+            <button type="button" class="pd-icon-btn" id="btn-close-mag-article" aria-label="닫기">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M15 6L9 12L15 18" stroke="#222" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </button>
+            <h2 class="pd-topbar__title" id="mag-article-title"></h2>
+            <span class="wizard-header-spacer" aria-hidden="true"></span>
+          </header>
+          <div id="mag-article-body" class="detail-content mag-article-body"></div>
+        </div>
+      </div>
+
+      <div id="product-preview" class="preview-overlay hidden" aria-hidden="true">
+        <div class="preview-backdrop" id="preview-backdrop" aria-hidden="true"></div>
+        <div class="preview-sheet" role="dialog" aria-modal="true" aria-labelledby="preview-name">
+          <div class="preview-handle" aria-hidden="true"></div>
+          <button type="button" class="preview-close" id="btn-close-preview" aria-label="닫기">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M6 6L18 18M18 6L6 18" stroke="#222" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </button>
+          <div id="preview-content" class="preview-content"></div>
+          <footer class="preview-footer">
+            <button type="button" class="preview-btn-primary" id="btn-preview-detail">자세히 보기</button>
+          </footer>
+        </div>
+      </div>
+
+      <div id="brand-shop" class="detail-overlay detail-overlay--stack hidden" aria-hidden="true">
+        <div class="detail-sheet detail-sheet--solid">
+          <header class="pd-topbar">
+            <button type="button" class="pd-icon-btn" id="btn-close-brand-shop" aria-label="뒤로가기">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M15 6L9 12L15 18" stroke="#222" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </button>
+            <h2 class="pd-topbar__title" id="brand-shop-title">브랜드관</h2>
+            <span class="wizard-header-spacer" aria-hidden="true"></span>
+          </header>
+          <div id="brand-shop-content" class="detail-content"></div>
+        </div>
+      </div>
+
+      <div id="product-detail" class="detail-overlay hidden" aria-hidden="true">
+        <div class="detail-sheet detail-sheet--solid">
+          <header class="pd-topbar">
+            <button type="button" class="pd-icon-btn" id="btn-close-detail" aria-label="뒤로가기">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M15 6L9 12L15 18" stroke="#222" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </button>
+            <h2 class="pd-topbar__title" id="pd-topbar-title"></h2>
+            <button type="button" class="pd-icon-btn" id="btn-save-product" aria-label="저장">
+              <svg class="pd-heart" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M12 20s-7-4.35-7-10a4.5 4.5 0 0 1 8-2.85A4.5 4.5 0 0 1 19 10c0 5.65-7 10-7 10z" fill="none" stroke="#222" stroke-width="1.8" stroke-linejoin="round"/>
+              </svg>
+            </button>
+          </header>
+          <nav class="pd-tabs" role="tablist" id="pd-tabs">
+            <button type="button" class="pd-tab pd-tab--active" data-pd-tab="product" role="tab" aria-selected="true">상품설명</button>
+            <button type="button" class="pd-tab" data-pd-tab="info" role="tab" aria-selected="false">상세정보</button>
+            <button type="button" class="pd-tab" data-pd-tab="qna" role="tab" aria-selected="false">문의</button>
+          </nav>
+          <div id="detail-content" class="detail-content"></div>
+        </div>
+      </div>
+
+      <div id="profile-edit-overlay" class="profile-edit-overlay hidden" aria-hidden="true">
+        <div class="profile-edit-sheet" role="dialog" aria-modal="true" aria-labelledby="profile-edit-title">
+          <header class="profile-edit-topbar">
+            <button type="button" class="pd-icon-btn" id="btn-close-profile-edit" aria-label="닫기">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M15 6L9 12L15 18" stroke="#222" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </button>
+            <h2 class="profile-edit-topbar__title" id="profile-edit-title">프로필 수정</h2>
+            <span class="wizard-header-spacer" aria-hidden="true"></span>
+          </header>
+          <div class="profile-edit-body">
+            <button type="button" class="profile-edit-avatar-btn" id="btn-change-avatar">
+              <span class="mypage-profile-avatar profile-edit-avatar-preview" id="profile-edit-avatar">
+                <img class="mypage-profile-avatar__img hidden" id="profile-edit-avatar-img" alt="" width="88" height="88" decoding="async" />
+                <span class="mypage-profile-avatar__initial" id="profile-edit-avatar-initial">회</span>
+              </span>
+              <span class="profile-edit-avatar-btn__label">프로필 사진 변경</span>
+            </button>
+            <input type="file" id="input-profile-avatar" accept="image/*" hidden />
+            <label class="profile-edit-field">
+              <span class="caption muted">닉네임</span>
+              <input
+                type="text"
+                class="wizard-nickname-input profile-edit-nickname"
+                id="input-profile-nickname"
+                maxlength="20"
+                placeholder="닉네임을 입력해 주세요"
+                autocomplete="nickname"
+              />
+            </label>
+          </div>
+          <footer class="profile-edit-footer">
+            <button type="button" class="btn btn--primary btn--block" id="btn-save-profile-edit">저장</button>
+          </footer>
+        </div>
+      </div>
+
+      <div id="skin-edit-overlay" class="profile-edit-overlay skin-edit-overlay hidden" aria-hidden="true">
+        <div class="profile-edit-sheet skin-edit-sheet" role="dialog" aria-modal="true" aria-labelledby="skin-edit-title">
+          <header class="profile-edit-topbar">
+            <button type="button" class="pd-icon-btn" id="btn-close-skin-edit" aria-label="닫기">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M15 6L9 12L15 18" stroke="#222" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </button>
+            <h2 class="profile-edit-topbar__title" id="skin-edit-title">피부 정보 수정</h2>
+            <span class="wizard-header-spacer" aria-hidden="true"></span>
+          </header>
+          <div class="skin-edit-body">
+            <section class="skin-edit-section">
+              <h3 class="skin-edit-section__title">피부 타입</h3>
+              <div class="option-grid skin-edit-grid" id="skin-edit-grid-type" role="group" aria-label="피부 타입 선택"></div>
+            </section>
+            <section class="skin-edit-section">
+              <h3 class="skin-edit-section__title">피부 고민</h3>
+              <p class="skin-edit-section__hint">최대 3개까지 선택할 수 있어요</p>
+              <div class="option-grid skin-edit-grid" id="skin-edit-grid-concerns" role="group" aria-label="피부 고민 선택"></div>
+            </section>
+            <section class="skin-edit-section">
+              <h3 class="skin-edit-section__title">피부 반응</h3>
+              <div class="option-list skin-edit-list" id="skin-edit-list-reaction" role="radiogroup" aria-label="피부 반응 선택"></div>
+            </section>
+          </div>
+          <footer class="profile-edit-footer">
+            <button type="button" class="btn btn--primary btn--block" id="btn-save-skin-edit">저장</button>
+          </footer>
+        </div>
+      </div>
+
+      <nav class="bottom-nav" aria-label="하단 탭">
+        <div class="bottom-nav__liquid" aria-hidden="true">
+          <div class="bottom-nav__rail"></div>
+          <div class="bottom-nav__goo-host" id="nav-goo-host">
+            <div class="bottom-nav__bubble bottom-nav__bubble--trail" id="nav-goo-trail" hidden></div>
+            <div class="bottom-nav__bubble bottom-nav__bubble--lead" id="nav-liquid-bubble"></div>
+          </div>
+        </div>
+        <div class="bottom-nav__actions">
+        <button type="button" class="nav-btn" data-tab="category">
+          <span class="nav-icon" aria-hidden="true">☰</span>
+          <span class="nav-label">카테고리</span>
+        </button>
+        <button type="button" class="nav-btn" data-tab="reviews">
+          <span class="nav-icon" aria-hidden="true">✎</span>
+          <span class="nav-label">리뷰</span>
+        </button>
+        <button type="button" class="nav-btn nav-btn--active" data-tab="home" aria-current="page">
+          <span class="nav-icon" aria-hidden="true">⌂</span>
+          <span class="nav-label">홈</span>
+        </button>
+        <button type="button" class="nav-btn" data-tab="magazine">
+          <span class="nav-icon" aria-hidden="true">◆</span>
+          <span class="nav-label">트루매거진</span>
+        </button>
+        <button type="button" class="nav-btn" data-tab="mypage">
+          <span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="1.05em" height="1.05em" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/></svg></span>
+          <span class="nav-label">마이페이지</span>
+        </button>
+        </div>
+      </nav>
+    </div>
+  </div>
+
+  <script src="data/products.js?v=20260602reviewads"></script>
+  <script src="script.js?v=20260602reviewimg"></script>
+</body>
+</html>
