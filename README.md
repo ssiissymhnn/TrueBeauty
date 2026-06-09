@@ -4,13 +4,12 @@
 
 ## 실행 방법
 
-1. `truebeauty` 폴더에서 `index.html`을 브라우저로 엽니다.
+1. 프로젝트 루트에서 `index.html`을 브라우저로 엽니다.
 2. 로고 이미지를 교체할 경우 `images/logo-placeholder.svg`를 같은 비율의 파일로 바꾸고, `index.html`의 `img` 경로를 유지하거나 수정합니다.
 
 ## 폴더 구조
 
 ```
-truebeauty/
 ├── index.html
 ├── style.css
 ├── script.js
