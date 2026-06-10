@@ -1140,6 +1140,31 @@
     overlay.setAttribute("aria-hidden", "true");
   }
 
+  function buildMagArticleBodyHtml(raw, meta) {
+    let html = `<div class="mag-article-tag">${escapeHtml(raw.tag)}</div>`;
+    html += `<p class="body-text mag-article-lead">${escapeHtml(meta.excerpt)}</p>`;
+
+    if (raw.sections && raw.sections.length) {
+      raw.sections.forEach((section) => {
+        html += `<h3 class="mag-article-h">${escapeHtml(section.heading)}</h3>`;
+        (section.paragraphs || []).forEach((paragraph) => {
+          html += `<p class="body-text">${escapeHtml(paragraph)}</p>`;
+        });
+        if (section.list && section.list.length) {
+          html += `<ul class="mag-article-list">${section.list
+            .map((item) => `<li>${escapeHtml(item)}</li>`)
+            .join("")}</ul>`;
+        }
+      });
+      return html;
+    }
+
+    (raw.paragraphs || []).forEach((paragraph) => {
+      html += `<p class="body-text">${escapeHtml(paragraph)}</p>`;
+    });
+    return html;
+  }
+
   function openMagArticleDetail(articleId) {
     const raw = getMagazineArticleById(articleId);
     if (!raw) return;
@@ -1156,10 +1181,7 @@
       bodyEl.innerHTML = buildMagTodayControversyDetailHtml(raw, p);
       bindProductClicks(bodyEl);
     } else {
-      bodyEl.innerHTML = `
-      <div class="mag-article-tag">${escapeHtml(raw.tag)}</div>
-      <p class="body-text">${escapeHtml(raw.excerpt)}</p>
-    `;
+      bodyEl.innerHTML = buildMagArticleBodyHtml(raw, meta);
     }
 
     const overlay = document.getElementById("mag-article-detail");
